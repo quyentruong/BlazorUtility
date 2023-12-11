@@ -6,6 +6,8 @@
 <MudText>If Custom Deduction is 0, the standard deduction will be used.</MudText>
 <MudText>Social Security Tax is 6.2% of gross income. Medicare Tax is 1.45% of gross income.</MudText>
 <MudText>Social Security Tax and Medicare Tax are total about 7.65% of gross income. They never change over years.</MudText>
+<MudText>Current system is only available for Washington resident.</MudText>
+<MudText>Long term care tax is 0.58% of gross income.</MudText>
 
 <br />
 
@@ -59,7 +61,9 @@
             <MudTh></MudTh>
             <MudTh>Result</MudTh>
         </HeaderContent>
+
         <RowTemplate>
+
             <MudTd DataLabel="Rate">@context.Rate</MudTd>
                 <MudTd DataLabel="Equation">@context.Equation</MudTd>
                 <MudTd>=</MudTd>

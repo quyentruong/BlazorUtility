@@ -99,7 +99,16 @@ public class Tax
         };
         equations.Add(medicareTaxEquation);
 
-        var totalTax = taxResult + socialSecurityTax + medicareTax;
+        var longTermCareTax = grossIncome * 0.0058m;
+        var longTermCareTaxEquation = new TaxEquation
+        {
+            Rate = "Long Term Care Tax",
+            Equation = $"${grossIncome} x 0.0058",
+            Result = $"${longTermCareTax:0.##}"
+        };
+        equations.Add(longTermCareTaxEquation);
+
+        var totalTax = taxResult + socialSecurityTax + medicareTax + longTermCareTax;
         var totalTaxEquation = new TaxEquation
         {
             Rate = "Total tax",
@@ -115,6 +124,14 @@ public class Tax
             Result = $"{Math.Round((totalTax) / grossIncome * 100, 2):0.##}%"
         };
         equations.Add(totalTaxPercentEquation);
+
+        var takeHomeEquation = new TaxEquation
+        {
+            Rate = "Take-home after tax",
+            Equation = $"${grossIncome} - ${totalTax:0.##}",
+            Result = $"${(grossIncome - totalTax):0.##}"
+        };
+        equations.Add(takeHomeEquation);
         return taxResult;
     }
 }
