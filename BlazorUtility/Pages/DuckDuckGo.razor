@@ -1,0 +1,61 @@
+﻿@page "/duckduckgo"
+@inject ClipboardService clipboard
+@inject ISnackbar Snackbar
+
+<PageTitle>DuckDuckGo Utility</PageTitle>
+
+<h2>DuckDuckGo Utility</h2>
+<MudText>This utility helps you combine your <b>DuckDuckGo email</b> and <b>destination email</b> into the <b>correct format</b> to send to the receiver.</MudText>
+<MudText>It also copies the email to the clipboard when you click on <MudIcon Size="Size.Small" Color="Color.Primary" Icon="@Icons.Material.Filled.ContentCopy" /></MudText>
+
+<MudTextField Counter="0" DebounceInterval="500" @bind-Value="DuckEmail" Label="Your Duck Email" HelperText="Ex: af2rae5@duck.com" Variant="Variant.Text" Clearable Validation="@(new DuckEmailValidationAttribute() {ErrorMessage = "The duck email address is invalid"})" />
+ <MudTextField Counter="0" DebounceInterval="500" @bind-Value="EmailSendTo" Label="Destination Email" HelperText="Ex: example@example.com" Variant="Variant.Text" Clearable Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
+ <MudTextField Counter="0" ReadOnly @bind-Value="EmailCompose" Label="Send with this email" Variant="Variant.Filled" AdornmentColor="Color.Primary" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.ContentCopy" OnAdornmentClick="@(e => OnAdornmentFn(e))" />
+
+ @code {
+    private string _duckEmail = "";
+    protected string DuckEmail
+    {
+        get => _duckEmail;
+        set
+        {
+            _duckEmail = value.Replace(" ", "");
+            _duckEmail = _duckEmail.RemoveConsecutiveAtSymbols();
+
+            if (_duckEmail.Length > 0)
+            {
+                ListEmailCompose[0] = "_" + _duckEmail;
+            }
+            else
+            {
+                ListEmailCompose[0] = "";
+            }
+            EmailCompose = ListEmailCompose[1] + ListEmailCompose[0];
+        }
+    }
+    private string[] ListEmailCompose = new string[2];
+
+    private string _emailSendTo = "";
+    protected string EmailSendTo
+    {
+        get => _emailSendTo;
+        set
+        {
+            _emailSendTo = value.Replace(" ", "");
+            _emailSendTo = _emailSendTo.RemoveConsecutiveAtSymbols();
+            ListEmailCompose[1] = _emailSendTo.Replace("@", "_at_");
+            EmailCompose = ListEmailCompose[1] + ListEmailCompose[0];
+        }
+    }
+    private string EmailCompose = "";
+
+    private async void OnAdornmentFn(EventArgs e)
+    {
+        if (EmailCompose.Length > 0)
+        {
+            await clipboard.WriteTextAsync(EmailCompose);
+            Snackbar.Add($"Copied {EmailCompose}", Severity.Success);
+        }
+    }
+
+}

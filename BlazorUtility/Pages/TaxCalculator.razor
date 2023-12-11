@@ -1,0 +1,157 @@
+﻿@page "/taxcalculator"
+
+<PageTitle>Tax Calculator</PageTitle>
+<h2>Tax Calculator</h2>
+<MudText>Enter tax details and click calculate to see the results.</MudText>
+<MudText>If Custom Deduction is 0, the standard deduction will be used.</MudText>
+<MudText>Social Security Tax is 6.2% of gross income. Medicare Tax is 1.45% of gross income.</MudText>
+<MudText>Social Security Tax and Medicare Tax are total about 7.65% of gross income. They never change over years.</MudText>
+
+<br />
+
+<MudGrid>
+    <MudItem xs="12" sm="4">
+        <MudSelect @bind-Value="TaxCountry" Label="Country" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var country in TaxCountries)
+            {
+                <MudSelectItem Value="@country" />
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudSelect @bind-Value="TaxYear" Label="Tax Year" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var year in TaxYears)
+            {
+                <MudSelectItem Value="@year" />
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudSelect @bind-Value="TaxFiler" Label="Tax Filer" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var filer in TaxFilers)
+            {
+                <MudSelectItem Value="@filer" />
+            }
+        </MudSelect>
+    </MudItem>
+</MudGrid>
+<MudGrid>
+    <MudItem xs="12" sm="3">
+        <MudTextField Disabled MaxLength="10" Validation="@(new RangeAttribute(0, double.MaxValue) { ErrorMessage = "Money has to be positive." })" AdornmentIcon="@Icons.Material.Filled.AttachMoney" Adornment="Adornment.Start" @bind-Value="StandardDeduction" Label="Standard Deduction" />
+     </MudItem>
+     <MudItem xs="12" sm="3">
+         <MudTextField MaxLength="10" Validation="@(new RangeAttribute(0, double.MaxValue) { ErrorMessage = "Money has to be positive." })" AdornmentIcon="@Icons.Material.Filled.AttachMoney" Adornment="Adornment.Start" @bind-Value="CustomDeduction" Label="Custom Deduction" />
+     </MudItem>
+     <MudItem xs="12" sm="6">
+         <MudTextField MaxLength="10" Validation="@(new RangeAttribute(0, double.MaxValue) { ErrorMessage = "Money has to be positive." })" AdornmentIcon="@Icons.Material.Filled.AttachMoney" Adornment="Adornment.Start" @bind-Value="Income" Label="Income" />
+     </MudItem>
+ </MudGrid>
+ <br />
+ <MudButton StartIcon="@Icons.Material.Filled.Calculate" Color="Color.Primary" Variant="Variant.Filled" OnClick="CalculateTax">Calculate</MudButton>
+ <br />
+ <br />
+ @if (Equations.Count > 0)
+{
+    <MudTable Items="@Equations" Hover="true" Breakpoint="Breakpoint.Sm">
+        <HeaderContent>
+            <MudTh>Rate</MudTh>
+            <MudTh>Equation</MudTh>
+            <MudTh></MudTh>
+            <MudTh>Result</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Rate">@context.Rate</MudTd>
+                <MudTd DataLabel="Equation">@context.Equation</MudTd>
+                <MudTd>=</MudTd>
+                <MudTd DataLabel="Result">@context.Result</MudTd>
+            </RowTemplate>
+        </MudTable>
+}
+else
+{
+    if (isTaxBtnClicked)
+    {
+        <MudText>Congratulations! You don't own any tax.</MudText>
+    }
+}
+
+@code {
+    private List<TaxEquation> Equations = [];
+    private decimal StandardDeduction { get; set; }
+    private decimal CustomDeduction { get; set; }
+    private decimal Income { get; set; }
+    private string TaxCountry { get; set; } = "United States";
+    private int _taxYear;
+
+    protected int TaxYear
+    {
+        get => _taxYear;
+        set
+        {
+            _taxYear = value;
+            Update();
+        }
+    }
+
+    private string _taxFiler = string.Empty;
+
+    protected string TaxFiler
+    {
+        get => _taxFiler;
+        set
+        {
+            _taxFiler = value;
+            Update();
+        }
+    }
+
+    public string[] TaxCountries = [];
+    public int[] TaxYears = [];
+
+    public string[] TaxFilers = [];
+
+    // private List<CountryTaxInfo> TaxList { get; set; }
+    private Tax Tax = new();
+    private bool IsInitialized = false;
+    private bool isTaxBtnClicked = false;
+
+    protected override void OnInitialized()
+    {
+        TaxCountries = Tax.TaxCountryNames();
+        TaxCountry = TaxCountries[0];
+        TaxYears = Tax.TaxYears(TaxCountry);
+        TaxYear = TaxYears[0];
+        TaxFilers = Tax.TaxFilers(TaxCountry, TaxYear);
+        TaxFiler = TaxFilers[0];
+        StandardDeduction = Tax.TaxDeduction(TaxCountry, TaxYear, TaxFiler);
+        IsInitialized = true;
+        // TaxList = new Tax().CountryTax;
+        // Console.WriteLine(TaxList[0].YearlyTaxInfo[2020]["Single"].Deduction);
+    }
+
+    private void CalculateTax()
+    {
+        isTaxBtnClicked = true;
+        var deduction = CustomDeduction > 0 ? CustomDeduction : StandardDeduction;
+        Tax?.TaxCalculator(TaxCountry, TaxYear, TaxFiler, Income, deduction, out Equations);
+        StateHasChanged();
+        // Console.WriteLine(Tax.YearlyTaxInfo(Country)[2021]);
+    }
+
+    private void Update()
+    {
+        try
+        {
+            if (IsInitialized)
+            {
+                StandardDeduction = Tax.TaxDeduction(TaxCountry, TaxYear, TaxFiler);
+                TaxFilers = Tax.TaxFilers(TaxCountry, TaxYear);
+            }
+        }
+        catch (Exception)
+        {
+            TaxFiler = TaxFilers[0];
+        }
+    }
+
+}
