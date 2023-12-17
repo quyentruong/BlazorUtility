@@ -23,13 +23,13 @@
  @foreach (var attackSpeedEffect in AttackSpeedEffects)
 {
     <MudGrid>
-        <MudItem xs="6" sm="3" lg="2">
+        <MudItem xs="8" sm="4" lg="3">
             <MudChipSet @bind-SelectedChip="attackSpeedEffect.Type" Filter="true" Mandatory="true">
                 <MudChip Text="Buff" Color="Color.Success" Default="true">Buff</MudChip>
                 <MudChip Text="Debuff" Color="Color.Error">Debuff</MudChip>
             </MudChipSet>
         </MudItem>
-        <MudItem xs="3" sm="2" Style="margin-top:-15px">
+        <MudItem xs="4" sm="2" Style="margin-top:-15px">
             <MudTextField DebounceInterval="500" MaxLength="5" @bind-Value="@attackSpeedEffect.Value" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
         </MudItem>
 
