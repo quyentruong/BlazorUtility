@@ -1,0 +1,191 @@
+﻿@page "/starcraft2"
+
+<h2>Starcraft 2</h2>
+<h3>Attack Speed Calculator</h3>
+<MudText>Green is good number and red is bad number after calculating.</MudText>
+<MudGrid>
+    <MudItem xs="6" sm="3">
+        <MudTextField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Validation="@(new RangeAttribute(0, double.MaxValue) { ErrorMessage = "Attack Speed has to be positive." })" AdornmentIcon="@CustomIcons.Filled.Sword" Adornment="Adornment.Start" @bind-Value="AttackSpeed" HelperText="Current Attack Speed" />
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudTextField Style="@UpdateStyle()" Margin="Margin.Dense" MaxLength="5" Disabled @bind-Value="AttackSpeedResult.Diff" HelperText="@AttackSpeedResult.ChangeStr" />
+     </MudItem>
+     <MudItem xs="6" sm="3">
+         <MudTextField Style="@UpdateStyle()" Margin="Margin.Dense" MaxLength="5" Disabled AdornmentIcon="@CustomIcons.Filled.Sword" Adornment="Adornment.Start" @bind-Value="AttackSpeedResult.NewAttackSpeed" HelperText="New Attack Speed" />
+     </MudItem>
+     <MudItem xs="6" sm="3">
+         <MudTextField Style="@UpdateStyle()" Margin="Margin.Dense" MaxLength="5" Disabled Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" @bind-Value="AttackSpeedResult.ChangePercent" HelperText="@AttackSpeedResult.ChangeStr" />
+     </MudItem>
+ </MudGrid>
+ <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="AddAttackSpeedEffectField"></MudIconButton>
+ <MudIconButton Icon="@CustomIcons.Filled.Minus" Color="Color.Primary" OnClick="RemoveAttackSpeedEffectField"></MudIconButton>
+ @foreach (var attackSpeedEffect in AttackSpeedEffects)
+{
+    <MudGrid>
+        <MudItem xs="6" sm="3" lg="2">
+            <MudChipSet @bind-SelectedChip="attackSpeedEffect.Type" Filter="true" Mandatory="true">
+                <MudChip Text="Buff" Color="Color.Success" Default="true">Buff</MudChip>
+                <MudChip Text="Debuff" Color="Color.Error">Debuff</MudChip>
+            </MudChipSet>
+        </MudItem>
+        <MudItem xs="3" sm="2" Style="margin-top:-15px">
+            <MudTextField DebounceInterval="500" MaxLength="5" @bind-Value="@attackSpeedEffect.Value" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
+        </MudItem>
+
+    </MudGrid>
+}
+<br />
+<br />
+<h3>Cooldown Rate Calculator</h3>
+<MudGrid>
+    <MudItem xs="6" sm="3">
+        <MudTextField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Validation="@(new RangeAttribute(0, int.MaxValue) { ErrorMessage = "Second has to be positive." })" @bind-Value="Cooldown" HelperText="Current Cooldown" Adornment="Adornment.End" AdornmentText="s" AdornmentColor="Color.Info" />
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled @bind-Value="CooldownResult.Diff" HelperText="@CooldownResult.ChangeStr" Adornment="Adornment.End" AdornmentText="s" AdornmentColor="Color.Info" />
+     </MudItem>
+     <MudItem xs="6" sm="3">
+         <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled @bind-Value="CooldownResult.NewCooldown" HelperText="New Cooldown" Adornment="Adornment.End" AdornmentText="s" AdornmentColor="Color.Info" />
+     </MudItem>
+     <MudItem xs="6" sm="3">
+         <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" @bind-Value="CooldownResult.ChangePercent" HelperText="@CooldownResult.ChangeStr" />
+     </MudItem>
+ </MudGrid>
+ <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="AddCooldownEffectField"></MudIconButton>
+ <MudIconButton Icon="@CustomIcons.Filled.Minus" Color="Color.Primary" OnClick="RemoveCooldownEffectField"></MudIconButton>
+ @foreach (var cooldownEffect in CooldownEffects)
+{
+    <MudGrid>
+        <MudItem xs="3" lg="1">
+            <MudChipSet @bind-SelectedChip="cooldownEffect.Type" Filter="true" Mandatory="true">
+                <MudChip Text="Buff" Color="Color.Success" Default="true">Buff</MudChip>
+            </MudChipSet>
+        </MudItem>
+        <MudItem xs="3" sm="2" Style="margin-top:-15px">
+            <MudTextField DebounceInterval="500" MaxLength="5" @bind-Value="@cooldownEffect.Value" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
+        </MudItem>
+
+    </MudGrid>
+}
+
+@code {
+    private static (double NewAttackSpeed, double Diff, double ChangePercent, string ChangeStr) AttackSpeedResult = (0, 0, 0, "");
+    private static (double NewCooldown, double Diff, double ChangePercent, string ChangeStr) CooldownResult = (0, 0, 0, "");
+    private static double _attackSpeed = 0;
+    protected static double AttackSpeed
+    {
+        get => _attackSpeed;
+        set
+        {
+            _attackSpeed = value;
+            AttackSpeedResult = AttackSpeedCalculate(value);
+        }
+    }
+
+    private static double _cooldown = 0;
+    protected static double Cooldown
+    {
+        get => _cooldown;
+        set
+        {
+            _cooldown = value;
+            CooldownResult = CooldownCalculate(value);
+        }
+    }
+
+    public static List<EffectData> AttackSpeedEffects { get; set; } = new();
+    private void AddAttackSpeedEffectField()
+    {
+        AttackSpeedEffects.Add(new EffectData());
+    }
+
+    private void RemoveAttackSpeedEffectField()
+    {
+        if (AttackSpeedEffects.Count > 0)
+        {
+            AttackSpeedEffects.RemoveAt(AttackSpeedEffects.Count - 1);
+            AttackSpeedResult = AttackSpeedCalculate(AttackSpeed);
+        }
+    }
+
+    public static List<EffectData> CooldownEffects { get; set; } = new();
+    private void AddCooldownEffectField()
+    {
+        CooldownEffects.Add(new EffectData());
+    }
+
+    private void RemoveCooldownEffectField()
+    {
+        if (AttackSpeedEffects.Count > 0)
+        {
+            CooldownEffects.RemoveAt(CooldownEffects.Count - 1);
+            CooldownResult = CooldownCalculate(Cooldown);
+
+        }
+    }
+
+    private string UpdateStyle()
+    {
+        return @AttackSpeedResult.ChangeStr.Equals("Increase") ? "color: rgba(244,67,54,1)" : "color: rgba(0,200,83,1)";
+    }
+
+    private static (double, double, double, string) AttackSpeedCalculate(double currentAttackSpeed)
+    {
+        var effectResult = 1d;
+        foreach (var attackSpeedEffect in AttackSpeedEffects)
+        {
+            var value = attackSpeedEffect.Value / 100d;
+            var effect = attackSpeedEffect.Type.Text.Equals("Buff") ? value : value * -1;
+            effectResult *= (1 + effect);
+        }
+        var newAttackSpeed = Math.Round(currentAttackSpeed / effectResult, 2);
+        var diff = Math.Round(newAttackSpeed - currentAttackSpeed, 2);
+
+        var changePercent = Math.Round(100 * diff / currentAttackSpeed, 2);
+        var changeStr = diff > 0 ? "Increase" : "Decrease";
+        return (newAttackSpeed, Math.Abs(diff), Math.Abs(changePercent), changeStr);
+    }
+
+    private static (double, double, double, string) CooldownCalculate(double currentCooldown)
+    {
+        var effectResult = 0d;
+        foreach (var cooldownEffect in CooldownEffects)
+        {
+            var value = cooldownEffect.Value / 100d;
+            var effect = cooldownEffect.Type.Text.Equals("Buff") ? value : value * -1;
+            effectResult += effect;
+        }
+        var newCooldown = Math.Round(currentCooldown / (1 + effectResult), 2);
+        var diff = Math.Round(newCooldown - currentCooldown, 2);
+
+        var changePercent = Math.Round(100 * diff / currentCooldown, 2);
+        var changeStr = diff > 0 ? "Increase" : "Decrease";
+        return (newCooldown, Math.Abs(diff), Math.Abs(changePercent), changeStr);
+    }
+
+    public class EffectData
+    {
+        private double _value { get; set; }
+        public double Value
+        {
+            get => _value;
+            set
+            {
+                _value = value;
+                AttackSpeedResult = AttackSpeedCalculate(AttackSpeed);
+                CooldownResult = CooldownCalculate(Cooldown);
+            }
+        }
+        private MudChip _type { get; set; } = null!;
+        public MudChip Type
+        {
+            get => _type;
+            set
+            {
+                _type = value;
+                AttackSpeedResult = AttackSpeedCalculate(AttackSpeed);
+                CooldownResult = CooldownCalculate(Cooldown);
+            }
+        }
+    }
+}
