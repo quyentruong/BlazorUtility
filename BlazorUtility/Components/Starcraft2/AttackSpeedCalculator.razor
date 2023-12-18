@@ -1,0 +1,90 @@
+﻿@namespace BlazorUtility
+@implements IDisposable
+@using System.ComponentModel
+
+<h3>Attack Speed Calculator</h3>
+<MudText>Green is good number and red is bad number after calculating.</MudText>
+<MudText>Attack Speed aura and Strike Weaponry after 25 minutes are addictive to attack speed. Each Level increases 10%.</MudText>
+<MudText>Ex: Aura Attack Speed 15%, Strike Weaponry 20%. Total is 35%</MudText>
+<MudText>Ability to increase Attack Speed is multiplicative only.</MudText>
+<MudGrid>
+    <MudItem xs="6" sm="3">
+        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="6" Min="0" Max="99999" Step="0.01" AdornmentIcon="@CustomIcons.Filled.Sword" Adornment="Adornment.Start" @bind-Value="AttackSpeedEffects.BaseValue" HelperText="Current Attack Speed" />
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudTextField Style="@UpdateStyle()" Margin="Margin.Dense" MaxLength="5" Disabled @bind-Value="AttackSpeedResult.Diff" HelperText="@AttackSpeedResult.ChangeStr" />
+     </MudItem>
+     <MudItem xs="6" sm="3">
+         <MudTextField Style="@UpdateStyle()" Margin="Margin.Dense" MaxLength="5" Disabled AdornmentIcon="@CustomIcons.Filled.Sword" Adornment="Adornment.Start" @bind-Value="AttackSpeedResult.NewAttackSpeed" HelperText="New Attack Speed" />
+     </MudItem>
+     <MudItem xs="6" sm="3">
+         <MudTextField Style="@UpdateStyle()" Margin="Margin.Dense" MaxLength="5" Disabled Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" @bind-Value="AttackSpeedResult.ChangePercent" HelperText="@AttackSpeedResult.ChangeStr" />
+     </MudItem>
+ </MudGrid>
+ <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="AttackSpeedEffects.Add"></MudIconButton>
+
+ @foreach (var attackSpeedEffect in AttackSpeedEffects.Effects)
+{
+    <MudGrid>
+        <MudItem xs="2" sm="2" lg="1">
+            <MudToggleIconButton @bind-Toggled="attackSpeedEffect.Toggle"
+                                 Icon="@Icons.Material.Filled.ArrowDownward" Color="@Color.Error" Title="Debuff"
+                                 ToggledIcon="@Icons.Material.Filled.ArrowUpward" ToggledColor="@Color.Success" ToggledTitle="Buff" />
+
+        </MudItem>
+        <MudItem xs="4" sm="2" Style="margin-top:-15px">
+            <MudNumericField DebounceInterval="500" MaxLength="3" Min="0" Max="999" @bind-Value="@attackSpeedEffect.Value" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
+        </MudItem>
+        <MudItem xs="3" sm="2" Style="margin-top:-15px">
+            <MudNumericField DebounceInterval="500" MaxLength="3" @bind-Value="attackSpeedEffect.Stack" HelperText="Stack" Variant="Variant.Text" Min="0" Max="999" />
+        </MudItem>
+        <MudItem xs="1">
+            <MudIconButton Icon="@CustomIcons.Filled.Minus" Color="Color.Error" OnClick="@(()=>AttackSpeedEffects.Remove(attackSpeedEffect))"></MudIconButton>
+        </MudItem>
+
+    </MudGrid>
+}
+
+@code {
+    private (double NewAttackSpeed, double Diff, double ChangePercent, string ChangeStr) AttackSpeedResult = (0, 0, 0, "");
+    private EffectDataCollection AttackSpeedEffects = new();
+
+    private string UpdateStyle()
+    {
+        return AttackSpeedResult.ChangeStr.Equals("Increase") ? "color: rgba(244,67,54,1)" : "color: rgba(0,200,83,1)";
+    }
+
+    protected override void OnInitialized()
+    {
+        AttackSpeedEffects.PropertyChanged += AttackSpeedEffects_PropertyChanged;
+    }
+
+    private void AttackSpeedEffects_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        AttackSpeedResult = AttackSpeedCalculate();
+    }
+
+    private (double, double, double, string) AttackSpeedCalculate()
+    {
+        var effectResult = 1d;
+        foreach (var attackSpeedEffect in AttackSpeedEffects.Effects)
+        {
+            var value = attackSpeedEffect.Value / 100d;
+            var effect = attackSpeedEffect.Toggle ? value : value * -1;
+            effectResult *= Math.Pow(1 + effect, attackSpeedEffect.Stack);
+        }
+        var newAttackSpeed = AttackSpeedEffects.BaseValue / effectResult;
+        var diff = Math.Round(newAttackSpeed - AttackSpeedEffects.BaseValue, 2);
+
+        var changePercent = AttackSpeedEffects.BaseValue > 0 ? Math.Round(100 * diff / AttackSpeedEffects.BaseValue, 2) : 0;
+        var changeStr = diff > 0 ? "Increase" : "Decrease";
+        return (Math.Round(newAttackSpeed, 2), Math.Abs(diff), Math.Abs(changePercent), changeStr);
+    }
+
+    public void Dispose()
+    {
+        AttackSpeedEffects.PropertyChanged -= AttackSpeedEffects_PropertyChanged;
+        AttackSpeedEffects.Cleanup();
+    }
+
+}

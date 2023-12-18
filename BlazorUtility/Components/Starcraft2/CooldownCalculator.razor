@@ -1,0 +1,78 @@
+﻿@namespace BlazorUtility
+@implements IDisposable
+@using System.ComponentModel
+<h3>Cooldown Rate Calculator</h3>
+<MudGrid>
+    <MudItem xs="6" sm="3">
+        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="0" Max="999" @bind-Value="CooldownEffects.BaseValue" HelperText="Current Cooldown" Adornment="Adornment.End" AdornmentText="s" AdornmentColor="Color.Info" />
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled @bind-Value="CooldownResult.Diff" HelperText="@CooldownResult.ChangeStr" Adornment="Adornment.End" AdornmentText="s" AdornmentColor="Color.Info" />
+     </MudItem>
+     <MudItem xs="6" sm="3">
+         <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled @bind-Value="CooldownResult.NewCooldown" HelperText="New Cooldown" Adornment="Adornment.End" AdornmentText="s" AdornmentColor="Color.Info" />
+     </MudItem>
+     <MudItem xs="6" sm="3">
+         <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" @bind-Value="CooldownResult.ChangePercent" HelperText="@CooldownResult.ChangeStr" />
+     </MudItem>
+ </MudGrid>
+ <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="CooldownEffects.Add"></MudIconButton>
+
+ @foreach (var cooldownEffect in CooldownEffects.Effects)
+{
+    <MudGrid>
+        <MudItem xs="2" sm="2" lg="1">
+            <MudToggleIconButton @bind-Toggled="cooldownEffect.Toggle"
+                                 Icon="@Icons.Material.Filled.ArrowDownward" Color="@Color.Error" Title="Debuff"
+                                 ToggledIcon="@Icons.Material.Filled.ArrowUpward" ToggledColor="@Color.Success" ToggledTitle="Buff" />
+
+        </MudItem>
+        <MudItem xs="4" sm="2" Style="margin-top:-15px">
+            <MudNumericField DebounceInterval="500" MaxLength="5" Min="0" Max="999" @bind-Value="@cooldownEffect.Value" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
+        </MudItem>
+        <MudItem xs="3" sm="2" Style="margin-top:-15px">
+            <MudNumericField DebounceInterval="500" MaxLength="3" @bind-Value="cooldownEffect.Stack" HelperText="Stack" Variant="Variant.Text" Min="0" Max="999" />
+        </MudItem>
+        <MudItem xs="1">
+            <MudIconButton Icon="@CustomIcons.Filled.Minus" Color="Color.Error" OnClick="@(()=>CooldownEffects.Remove(cooldownEffect))"></MudIconButton>
+        </MudItem>
+    </MudGrid>
+}
+@code {
+    private (double NewCooldown, double Diff, double ChangePercent, string ChangeStr) CooldownResult = (0, 0, 0, "");
+
+    private EffectDataCollection CooldownEffects = new();
+
+    protected override void OnInitialized()
+    {
+        CooldownEffects.PropertyChanged += CooldownEffects_PropertyChanged;
+    }
+
+    private void CooldownEffects_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        CooldownResult = CooldownCalculate();
+    }
+
+    private (double, double, double, string) CooldownCalculate()
+    {
+        var effectResult = 0d;
+        foreach (var cooldownEffect in CooldownEffects.Effects)
+        {
+            var value = cooldownEffect.Value / 100d;
+            var effect = cooldownEffect.Toggle ? value : value * -1;
+            effectResult += effect * cooldownEffect.Stack;
+        }
+        var newCooldown = Math.Round(CooldownEffects.BaseValue / (1 + effectResult), 2);
+        var diff = Math.Round(newCooldown - CooldownEffects.BaseValue, 2);
+
+        var changePercent = CooldownEffects.BaseValue > 0 ? Math.Round(100 * diff / CooldownEffects.BaseValue, 2) : 0;
+        var changeStr = diff > 0 ? "Increase" : "Decrease";
+        return (newCooldown, Math.Abs(diff), Math.Abs(changePercent), changeStr);
+    }
+
+    public void Dispose()
+    {
+        CooldownEffects.PropertyChanged -= CooldownEffects_PropertyChanged;
+        CooldownEffects.Cleanup();
+    }
+}
