@@ -9,7 +9,7 @@
 <MudText>Ability to increase Attack Speed is multiplicative only.</MudText>
 <MudGrid>
     <MudItem xs="6" sm="3">
-        <MudTextField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Validation="@(new RangeAttribute(0, double.MaxValue) { ErrorMessage = "Attack Speed has to be positive." })" AdornmentIcon="@CustomIcons.Filled.Sword" Adornment="Adornment.Start" @bind-Value="CurrentAttackSpeed" HelperText="Current Attack Speed" />
+        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="6" Min="0" Max="99999" Step="0.01" AdornmentIcon="@CustomIcons.Filled.Sword" Adornment="Adornment.Start" @bind-Value="CurrentAttackSpeed" HelperText="Current Attack Speed" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudTextField Style="@UpdateStyle()" Margin="Margin.Dense" MaxLength="5" Disabled @bind-Value="AttackSpeedResult.Diff" HelperText="@AttackSpeedResult.ChangeStr" />
@@ -22,18 +22,24 @@
      </MudItem>
  </MudGrid>
  <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="AddAttackSpeedEffectField"></MudIconButton>
- <MudIconButton Icon="@CustomIcons.Filled.Minus" Color="Color.Primary" OnClick="RemoveAttackSpeedEffectField"></MudIconButton>
+ @* <MudIconButton Icon="@CustomIcons.Filled.Minus" Color="Color.Primary" OnClick="RemoveAttackSpeedEffectField"></MudIconButton> *@
  @foreach (var attackSpeedEffect in AttackSpeedEffects)
 {
     <MudGrid>
-        <MudItem xs="8" sm="4" lg="3">
-            <MudChipSet @bind-SelectedChip="attackSpeedEffect.Type" Filter="true" Mandatory="true">
-                <MudChip Text="Buff" Color="Color.Success" Default="true">Buff</MudChip>
-                <MudChip Text="Debuff" Color="Color.Error">Debuff</MudChip>
-            </MudChipSet>
+        <MudItem xs="2" sm="3" lg="1">
+            <MudToggleIconButton @bind-Toggled="attackSpeedEffect.Toggle"
+                                 Icon="@Icons.Material.Filled.ArrowDownward" Color="@Color.Error" Title="Debuff"
+                                 ToggledIcon="@Icons.Material.Filled.ArrowUpward" ToggledColor="@Color.Success" ToggledTitle="Buff" />
+
         </MudItem>
         <MudItem xs="4" sm="2" Style="margin-top:-15px">
-            <MudTextField DebounceInterval="500" MaxLength="5" @bind-Value="@attackSpeedEffect.Value" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
+            <MudNumericField DebounceInterval="500" MaxLength="3" Min="0" Max="999" @bind-Value="@attackSpeedEffect.Value" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
+        </MudItem>
+        <MudItem xs="3" sm="1" Style="margin-top:-15px">
+            <MudNumericField DebounceInterval="500" MaxLength="3" @bind-Value="attackSpeedEffect.Stack" HelperText="Stack" Variant="Variant.Text" Min="0" Max="999" />
+        </MudItem>
+        <MudItem xs="1">
+            <MudIconButton Icon="@CustomIcons.Filled.Minus" Color="Color.Error" OnClick="@(()=>RemoveAttackSpeedEffectField(attackSpeedEffect))"></MudIconButton>
         </MudItem>
 
     </MudGrid>
@@ -43,7 +49,7 @@
 <h3>Cooldown Rate Calculator</h3>
 <MudGrid>
     <MudItem xs="6" sm="3">
-        <MudTextField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Validation="@(new RangeAttribute(0, int.MaxValue) { ErrorMessage = "Second has to be positive." })" @bind-Value="Cooldown" HelperText="Current Cooldown" Adornment="Adornment.End" AdornmentText="s" AdornmentColor="Color.Info" />
+        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="0" Max="999" @bind-Value="CurrentCooldown" HelperText="Current Cooldown" Adornment="Adornment.End" AdornmentText="s" AdornmentColor="Color.Info" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled @bind-Value="CooldownResult.Diff" HelperText="@CooldownResult.ChangeStr" Adornment="Adornment.End" AdornmentText="s" AdornmentColor="Color.Info" />
@@ -56,17 +62,24 @@
      </MudItem>
  </MudGrid>
  <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="AddCooldownEffectField"></MudIconButton>
- <MudIconButton Icon="@CustomIcons.Filled.Minus" Color="Color.Primary" OnClick="RemoveCooldownEffectField"></MudIconButton>
+
  @foreach (var cooldownEffect in CooldownEffects)
 {
     <MudGrid>
-        <MudItem xs="3" lg="1">
-            <MudChipSet @bind-SelectedChip="cooldownEffect.Type" Filter="true" Mandatory="true">
-                <MudChip Text="Buff" Color="Color.Success" Default="true">Buff</MudChip>
-            </MudChipSet>
+        <MudItem xs="2" sm="3" lg="1">
+            <MudToggleIconButton @bind-Toggled="cooldownEffect.Toggle"
+                                 Icon="@Icons.Material.Filled.ArrowDownward" Color="@Color.Error" Title="Debuff"
+                                 ToggledIcon="@Icons.Material.Filled.ArrowUpward" ToggledColor="@Color.Success" ToggledTitle="Buff" />
+
         </MudItem>
-        <MudItem xs="3" sm="2" Style="margin-top:-15px">
-            <MudTextField DebounceInterval="500" MaxLength="5" @bind-Value="@cooldownEffect.Value" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
+        <MudItem xs="4" sm="2" Style="margin-top:-15px">
+            <MudNumericField DebounceInterval="500" MaxLength="5" Min="0" Max="999" @bind-Value="@cooldownEffect.Value" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
+        </MudItem>
+        <MudItem xs="3" sm="1" Style="margin-top:-15px">
+            <MudNumericField DebounceInterval="500" MaxLength="3" @bind-Value="cooldownEffect.Stack" HelperText="Stack" Variant="Variant.Text" Min="0" Max="999" />
+        </MudItem>
+        <MudItem xs="1">
+            <MudIconButton Icon="@CustomIcons.Filled.Minus" Color="Color.Error" OnClick="@(()=>RemoveCooldownEffectField(cooldownEffect))"></MudIconButton>
         </MudItem>
     </MudGrid>
 }
@@ -79,19 +92,19 @@
         get => _currentAttackSpeed;
         set
         {
-            _currentAttackSpeed = value;
+            _currentAttackSpeed = Math.Round(value, 2);
             AttackSpeedResult = AttackSpeedCalculate();
         }
     }
 
-    private static double _cooldown = 0;
-    protected static double Cooldown
+    private static double _currentCooldown = 0;
+    protected static double CurrentCooldown
     {
-        get => _cooldown;
+        get => _currentCooldown;
         set
         {
-            _cooldown = value;
-            CooldownResult = CooldownCalculate(value);
+            _currentCooldown = value;
+            CooldownResult = CooldownCalculate();
         }
     }
 
@@ -101,11 +114,11 @@
         AttackSpeedEffects.Add(new EffectData());
     }
 
-    private void RemoveAttackSpeedEffectField()
+    private void RemoveAttackSpeedEffectField(EffectData effectData)
     {
         if (AttackSpeedEffects.Count > 0)
         {
-            AttackSpeedEffects.RemoveAt(AttackSpeedEffects.Count - 1);
+            AttackSpeedEffects.Remove(effectData);
             AttackSpeedResult = AttackSpeedCalculate();
         }
     }
@@ -116,12 +129,12 @@
         CooldownEffects.Add(new EffectData());
     }
 
-    private void RemoveCooldownEffectField()
+    private void RemoveCooldownEffectField(EffectData effectData)
     {
         if (CooldownEffects.Count > 0)
         {
-            CooldownEffects.RemoveAt(CooldownEffects.Count - 1);
-            CooldownResult = CooldownCalculate(Cooldown);
+            CooldownEffects.Remove(effectData);
+            CooldownResult = CooldownCalculate();
         }
     }
 
@@ -136,8 +149,8 @@
         foreach (var attackSpeedEffect in AttackSpeedEffects)
         {
             var value = attackSpeedEffect.Value / 100d;
-            var effect = attackSpeedEffect.Type.Text.Equals("Buff") ? value : value * -1;
-            effectResult *= (1 + effect);
+            var effect = attackSpeedEffect.Toggle ? value : value * -1;
+            effectResult *= Math.Pow(1 + effect, attackSpeedEffect.Stack);
         }
         var newAttackSpeed = CurrentAttackSpeed / effectResult;
         var diff = Math.Round(newAttackSpeed - CurrentAttackSpeed, 2);
@@ -147,19 +160,19 @@
         return (Math.Round(newAttackSpeed, 2), Math.Abs(diff), Math.Abs(changePercent), changeStr);
     }
 
-    private static (double, double, double, string) CooldownCalculate(double currentCooldown)
+    private static (double, double, double, string) CooldownCalculate()
     {
         var effectResult = 0d;
         foreach (var cooldownEffect in CooldownEffects)
         {
             var value = cooldownEffect.Value / 100d;
-            var effect = cooldownEffect.Type.Text.Equals("Buff") ? value : value * -1;
-            effectResult += effect;
+            var effect = cooldownEffect.Toggle ? value : value * -1;
+            effectResult += effect * cooldownEffect.Stack;
         }
-        var newCooldown = Math.Round(currentCooldown / (1 + effectResult), 2);
-        var diff = Math.Round(newCooldown - currentCooldown, 2);
+        var newCooldown = Math.Round(CurrentCooldown / (1 + effectResult), 2);
+        var diff = Math.Round(newCooldown - CurrentCooldown, 2);
 
-        var changePercent = currentCooldown > 0 ? Math.Round(100 * diff / currentCooldown, 2) : 0;
+        var changePercent = CurrentCooldown > 0 ? Math.Round(100 * diff / CurrentCooldown, 2) : 0;
         var changeStr = diff > 0 ? "Increase" : "Decrease";
         return (newCooldown, Math.Abs(diff), Math.Abs(changePercent), changeStr);
     }
@@ -174,18 +187,30 @@
             {
                 _value = value;
                 AttackSpeedResult = AttackSpeedCalculate();
-                CooldownResult = CooldownCalculate(Cooldown);
+                CooldownResult = CooldownCalculate();
             }
         }
-        private MudChip _type { get; set; } = null!;
-        public MudChip Type
+
+        private bool _toggle { get; set; } = true;
+        public bool Toggle
         {
-            get => _type;
+            get => _toggle;
             set
             {
-                _type = value;
+                _toggle = value;
                 AttackSpeedResult = AttackSpeedCalculate();
-                CooldownResult = CooldownCalculate(Cooldown);
+                CooldownResult = CooldownCalculate();
+            }
+        }
+        private int _stack { get; set; } = 1;
+        public int Stack
+        {
+            get => _stack;
+            set
+            {
+                _stack = value;
+                AttackSpeedResult = AttackSpeedCalculate();
+                CooldownResult = CooldownCalculate();
             }
         }
     }
