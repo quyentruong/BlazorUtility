@@ -4,9 +4,12 @@
 <h2>Starcraft 2 Utility</h2>
 <h3>Attack Speed Calculator</h3>
 <MudText>Green is good number and red is bad number after calculating.</MudText>
+<MudText>Attack Speed aura and Strike Weaponry after 25 minutes are addictive to attack speed. Each Level increases 10%.</MudText>
+<MudText>Ex: Aura Attack Speed 15%, Strike Weaponry 20%. Total is 35%</MudText>
+<MudText>Ability to increase Attack Speed is multiplicative only.</MudText>
 <MudGrid>
     <MudItem xs="6" sm="3">
-        <MudTextField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Validation="@(new RangeAttribute(0, double.MaxValue) { ErrorMessage = "Attack Speed has to be positive." })" AdornmentIcon="@CustomIcons.Filled.Sword" Adornment="Adornment.Start" @bind-Value="AttackSpeed" HelperText="Current Attack Speed" />
+        <MudTextField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Validation="@(new RangeAttribute(0, double.MaxValue) { ErrorMessage = "Attack Speed has to be positive." })" AdornmentIcon="@CustomIcons.Filled.Sword" Adornment="Adornment.Start" @bind-Value="CurrentAttackSpeed" HelperText="Current Attack Speed" />
     </MudItem>
     <MudItem xs="6" sm="3">
         <MudTextField Style="@UpdateStyle()" Margin="Margin.Dense" MaxLength="5" Disabled @bind-Value="AttackSpeedResult.Diff" HelperText="@AttackSpeedResult.ChangeStr" />
@@ -67,18 +70,17 @@
         </MudItem>
     </MudGrid>
 }
-
 @code {
     private static (double NewAttackSpeed, double Diff, double ChangePercent, string ChangeStr) AttackSpeedResult = (0, 0, 0, "");
     private static (double NewCooldown, double Diff, double ChangePercent, string ChangeStr) CooldownResult = (0, 0, 0, "");
-    private static double _attackSpeed = 0;
-    protected static double AttackSpeed
+    private static double _currentAttackSpeed = 0;
+    protected static double CurrentAttackSpeed
     {
-        get => _attackSpeed;
+        get => _currentAttackSpeed;
         set
         {
-            _attackSpeed = value;
-            AttackSpeedResult = AttackSpeedCalculate(value);
+            _currentAttackSpeed = value;
+            AttackSpeedResult = AttackSpeedCalculate();
         }
     }
 
@@ -104,7 +106,7 @@
         if (AttackSpeedEffects.Count > 0)
         {
             AttackSpeedEffects.RemoveAt(AttackSpeedEffects.Count - 1);
-            AttackSpeedResult = AttackSpeedCalculate(AttackSpeed);
+            AttackSpeedResult = AttackSpeedCalculate();
         }
     }
 
@@ -128,7 +130,7 @@
         return @AttackSpeedResult.ChangeStr.Equals("Increase") ? "color: rgba(244,67,54,1)" : "color: rgba(0,200,83,1)";
     }
 
-    private static (double, double, double, string) AttackSpeedCalculate(double currentAttackSpeed)
+    private static (double, double, double, string) AttackSpeedCalculate()
     {
         var effectResult = 1d;
         foreach (var attackSpeedEffect in AttackSpeedEffects)
@@ -137,12 +139,12 @@
             var effect = attackSpeedEffect.Type.Text.Equals("Buff") ? value : value * -1;
             effectResult *= (1 + effect);
         }
-        var newAttackSpeed = Math.Round(currentAttackSpeed / effectResult, 2);
-        var diff = Math.Round(newAttackSpeed - currentAttackSpeed, 2);
+        var newAttackSpeed = CurrentAttackSpeed / effectResult;
+        var diff = Math.Round(newAttackSpeed - CurrentAttackSpeed, 2);
 
-        var changePercent = currentAttackSpeed > 0 ? Math.Round(100 * diff / currentAttackSpeed, 2) : 0;
+        var changePercent = CurrentAttackSpeed > 0 ? Math.Round(100 * diff / CurrentAttackSpeed, 2) : 0;
         var changeStr = diff > 0 ? "Increase" : "Decrease";
-        return (newAttackSpeed, Math.Abs(diff), Math.Abs(changePercent), changeStr);
+        return (Math.Round(newAttackSpeed, 2), Math.Abs(diff), Math.Abs(changePercent), changeStr);
     }
 
     private static (double, double, double, string) CooldownCalculate(double currentCooldown)
@@ -171,7 +173,7 @@
             set
             {
                 _value = value;
-                AttackSpeedResult = AttackSpeedCalculate(AttackSpeed);
+                AttackSpeedResult = AttackSpeedCalculate();
                 CooldownResult = CooldownCalculate(Cooldown);
             }
         }
@@ -182,7 +184,7 @@
             set
             {
                 _type = value;
-                AttackSpeedResult = AttackSpeedCalculate(AttackSpeed);
+                AttackSpeedResult = AttackSpeedCalculate();
                 CooldownResult = CooldownCalculate(Cooldown);
             }
         }
