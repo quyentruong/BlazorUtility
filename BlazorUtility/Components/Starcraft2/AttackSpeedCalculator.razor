@@ -28,14 +28,14 @@
     <MudGrid>
         <MudItem xs="2" sm="2" lg="1">
             <MudToggleIconButton @bind-Toggled="attackSpeedEffect.Toggle"
-                                 Icon="@Icons.Material.Filled.ArrowDownward" Color="@Color.Error" Title="Debuff"
-                                 ToggledIcon="@Icons.Material.Filled.ArrowUpward" ToggledColor="@Color.Success" ToggledTitle="Buff" />
+                                 Icon="@Icons.Material.Filled.ArrowDownward" Color="@Color.Error" title="@(attackSpeedEffect.Toggle ? "Buff" : "Debuff")"
+                                 ToggledIcon="@Icons.Material.Filled.ArrowUpward" ToggledColor="@Color.Success" />
 
         </MudItem>
-        <MudItem xs="4" sm="2" Style="margin-top:-15px">
+        <MudItem xs="4" sm="2">
             <MudNumericField DebounceInterval="500" MaxLength="3" Min="0" Max="999" @bind-Value="@attackSpeedEffect.Value" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
         </MudItem>
-        <MudItem xs="3" sm="2" Style="margin-top:-15px">
+        <MudItem xs="3" sm="2">
             <MudNumericField DebounceInterval="500" MaxLength="3" @bind-Value="attackSpeedEffect.Stack" HelperText="Stack" Variant="Variant.Text" Min="0" Max="999" />
         </MudItem>
         <MudItem xs="1">
