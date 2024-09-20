@@ -2,12 +2,15 @@
 <h3>Stock Plan</h3>
 
 <MudGrid>
-    <MudItem xs="6" sm="3">
+    <MudItem xs="4" sm="3">
         <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="0" Max="999" @bind-Value="StockPrice" HelperText="Current Stock Price" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
     </MudItem>
-    @* <MudItem xs="6" sm="3">
-        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="0" Max="999" @bind-Value="StockQuantity" HelperText="Quantity" />
-    </MudItem> *@
+    <MudItem xs="4" sm="3">
+        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="-999" Max="999" @bind-Value="CustomPercentage" HelperText="Percentage" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
+    </MudItem>
+    <MudItem xs="4" sm="3">
+        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1+CustomPercentage/100)" HelperText="New Stock Price" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
+    </MudItem>
 </MudGrid>
 
 <h3>Buying Plan</h3>
@@ -56,7 +59,7 @@
 
 @code {
     private double StockPrice = 0;
-    // private int StockQuantity = 0;
+    private double CustomPercentage = 0;
     private string GetStockPriceByPercentage(double percentage)
     {
         return Math.Round(StockPrice * percentage, 2).ToString();
