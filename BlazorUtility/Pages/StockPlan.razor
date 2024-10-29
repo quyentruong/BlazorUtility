@@ -18,76 +18,77 @@
         <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1+CustomPercentage/100)" HelperText="New Stock Price" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
     </MudItem>
 </MudGrid>
-
+<br />
 <h3>Buying Plan</h3>
-
+<br />
 <MudExpansionPanels MultiExpansion>
     <MudExpansionPanel Text="Rule 5/8/11/14">
         <MudGrid>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.95)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 5%" />
             </MudItem>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.92)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 8%" />
             </MudItem>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.89)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 11%" />
             </MudItem>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.86)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 14%" />
             </MudItem>
         </MudGrid>
     </MudExpansionPanel>
     <MudExpansionPanel Text="Rule 6/9/12/15">
         <MudGrid>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.94)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 6%" />
             </MudItem>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.91)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 9%" />
             </MudItem>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.88)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 12%" />
             </MudItem>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.85)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 15%" />
             </MudItem>
         </MudGrid>
     </MudExpansionPanel>
 </MudExpansionPanels>
 
-
+<br />
 <h3>Selling Plan</h3>
+<br />
 
 <MudExpansionPanels MultiExpansion>
     <MudExpansionPanel Text="Rule 5/8/11/14">
         <MudGrid>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1.05)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="Up 5%" />
             </MudItem>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1.08)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="Up 8%" />
             </MudItem>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1.11)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="Up 11%" />
             </MudItem>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1.14)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="Up 14%" />
             </MudItem>
         </MudGrid>
     </MudExpansionPanel>
     <MudExpansionPanel Text="Rule 6/9/12/15">
         <MudGrid>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1.06)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="Up 6%" />
             </MudItem>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1.09)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="Up 9%" />
             </MudItem>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1.12)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="Up 12%" />
             </MudItem>
-            <MudItem xs="6" sm="2">
+            <MudItem xs="6" sm="3">
                 <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1.15)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="Up 15%" />
             </MudItem>
         </MudGrid>
@@ -109,6 +110,6 @@
         if (StockPrice == 0) return "0"; // avoid divide by zero (StockPrice = 0)
         double stockPrice = 1;
         double.TryParse(GetStockPriceByPercentage(percentage), out stockPrice);
-        return $"{stockPrice} = {Math.Floor(MoneyAvailable / 4 / stockPrice).ToString()} shares";
+        return $"{stockPrice} = {Math.Floor(MoneyAvailable / 4 / stockPrice).ToString()}";
     }
 }
