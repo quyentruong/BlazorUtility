@@ -12,6 +12,9 @@
         <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="0" Max="999" @bind-Value="StockPrice" HelperText="Current Stock Price" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
     </MudItem>
     <MudItem xs="4" sm="3">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GetCurrentStockPrice">Get Price</MudButton>
+    </MudItem>
+    <MudItem xs="4" sm="3">
         <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="-999" Max="999" @bind-Value="CustomPercentage" HelperText="Percentage" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
     </MudItem>
     <MudItem xs="4" sm="3">
@@ -96,20 +99,4 @@
 </MudExpansionPanels>
 
 
-@code {
-    private double MoneyAvailable = 0;
-    private double StockPrice = 0;
-    private double CustomPercentage = 0;
-    private string GetStockPriceByPercentage(double percentage)
-    {
-        return Math.Round(StockPrice * percentage, 2).ToString();
-    }
 
-    private string GetNumberOfStocks(double percentage)
-    {
-        if (StockPrice == 0) return "0"; // avoid divide by zero (StockPrice = 0)
-        double stockPrice = 1;
-        double.TryParse(GetStockPriceByPercentage(percentage), out stockPrice);
-        return $"{stockPrice} = {Math.Floor(MoneyAvailable / 4 / stockPrice).ToString()}";
-    }
-}
