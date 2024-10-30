@@ -1,6 +1,7 @@
 ﻿@page "/stockplan"
 @inject IHttpClientFactory HttpClientFactory
-@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject ILocalStorageService localStorage
+@inject ISnackbar Snackbar
 <h3>Stock Plan</h3>
 
 <MudGrid>

@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using BlazorUtility.Models;
+using MudBlazor;
 
 namespace BlazorUtility.Pages;
 
@@ -27,6 +28,7 @@ public partial class StockPlan
 
     private async Task GetCurrentStockPrice()
     {
+        Snackbar.Add("Getting stock price...", Severity.Info);
         var i = GetTimeBasedValue();
         string cacheKey = $"{SelectedStockSymbol}_StockPrice";
         string timeBasedValueKey = $"{SelectedStockSymbol}_TimeBasedValue";
@@ -36,6 +38,7 @@ public partial class StockPlan
         if (cachedTimeBasedValue.HasValue && cachedTimeBasedValue.Value == i)
         {
             StockPrice = await localStorage.GetItemAsync<double>(cacheKey);
+            Snackbar.Add("Stock price retrieved from cache.", Severity.Success);
             return;
         }
 
@@ -54,7 +57,13 @@ public partial class StockPlan
                 // Cache the stock price and time-based value
                 await localStorage.SetItemAsync(cacheKey, StockPrice);
                 await localStorage.SetItemAsync(timeBasedValueKey, i);
+
+                Snackbar.Add("Stock price fetched successfully.", Severity.Success);
             }
+        }
+        else
+        {
+            Snackbar.Add("Failed to fetch stock price.", Severity.Error);
         }
     }
 
