@@ -1,18 +1,28 @@
 ﻿@page "/stockplan"
+@inject IHttpClientFactory HttpClientFactory
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 <h3>Stock Plan</h3>
 
 <MudGrid>
     <MudItem xs="4" sm="3">
         <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="0" Max="99999" @bind-Value="MoneyAvailable" HelperText="Money Available" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
     </MudItem>
+    <MudItem xs="4" sm="3">
+        <MudSelect @bind-Value="SelectedStockSymbol" HelperText="Stock Symbol" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var stockSymbol in _stockSymbols)
+            {
+                <MudSelectItem Value="@stockSymbol" />
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="3" sm="3">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="async () => await GetCurrentStockPrice()">Fetch</MudButton>
+    </MudItem>
 </MudGrid>
 
 <MudGrid>
     <MudItem xs="4" sm="3">
         <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="0" Max="999" @bind-Value="StockPrice" HelperText="Current Stock Price" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
-    </MudItem>
-    <MudItem xs="4" sm="3">
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GetCurrentStockPrice">Get Price</MudButton>
     </MudItem>
     <MudItem xs="4" sm="3">
         <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="-999" Max="999" @bind-Value="CustomPercentage" HelperText="Percentage" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
