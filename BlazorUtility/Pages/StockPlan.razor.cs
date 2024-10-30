@@ -94,14 +94,14 @@ public partial class StockPlan
 
     private static int GetTimeBasedValue()
     {
-        var currentTime = DateTime.Now.TimeOfDay;
-        var startTime = new TimeSpan(17, 0, 0); // 5:00 PM
-        var endTime = new TimeSpan(6, 30, 0); // 6:30 AM
+        var currentTime = DateTime.UtcNow.TimeOfDay;
+        var startTime = new TimeSpan(14, 30, 0); // 2:30 PM UTC
+        var endTime = new TimeSpan(21, 0, 0); // 9:00 PM UTC
 
-        if (currentTime >= startTime || currentTime <= endTime)
+        if (currentTime >= startTime && currentTime <= endTime)
         {
-            return 1;
+            return 2;
         }
-        return 2;
+        return 1;
     }
 }
