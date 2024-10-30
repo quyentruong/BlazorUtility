@@ -10,20 +10,45 @@ public partial class StockPlan
     private double StockPrice = 0;
     private double CustomPercentage = 0;
     private string SelectedStockSymbol = "SOXL";
-    private string[] _stockSymbols = { "SOXL", "NVDA", "AMD", "INTC", "SCHD" };
+    private readonly string[] _stockSymbols =
+    {
+        "SOXL",
+        "NVDA",
+        "AMD",
+        "INTC",
+        "SCHD",
+        "T",
+        "SPLG"
+    };
+
+    protected override Task OnInitializedAsync()
+    {
+        Array.Sort(_stockSymbols);
+        return Task.CompletedTask;
+    }
 
     private string GetStockPriceByPercentage(double percentage)
     {
         return Math.Round(StockPrice * percentage, 2).ToString();
     }
 
+    private string GetNumberOfSharesByCustomPercentage()
+    {
+        if (StockPrice == 0)
+            return "0"; // avoid divide by zero (StockPrice = 0)
+        _ = double.TryParse(
+            GetStockPriceByPercentage(1 + CustomPercentage / 100),
+            out double stockPrice
+        );
+        return Math.Floor(MoneyAvailable / stockPrice).ToString();
+    }
+
     private string GetNumberOfStocks(double percentage)
     {
         if (StockPrice == 0)
             return "0"; // avoid divide by zero (StockPrice = 0)
-        double stockPrice = 1;
-        double.TryParse(GetStockPriceByPercentage(percentage), out stockPrice);
-        return $"{stockPrice} = {Math.Floor(MoneyAvailable / 4 / stockPrice).ToString()}";
+        _ = double.TryParse(GetStockPriceByPercentage(percentage), out double stockPrice);
+        return $"{stockPrice} = {Math.Floor(MoneyAvailable / 4 / stockPrice)}";
     }
 
     private async Task GetCurrentStockPrice()
@@ -67,7 +92,7 @@ public partial class StockPlan
         }
     }
 
-    private int GetTimeBasedValue()
+    private static int GetTimeBasedValue()
     {
         var currentTime = DateTime.Now.TimeOfDay;
         var startTime = new TimeSpan(17, 0, 0); // 5:00 PM

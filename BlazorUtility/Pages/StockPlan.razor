@@ -6,7 +6,7 @@
 
 <MudGrid>
     <MudItem xs="4" sm="3">
-        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="0" Max="99999" @bind-Value="MoneyAvailable" HelperText="Money Available" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
+        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="0" Max="9999999" @bind-Value="MoneyAvailable" HelperText="Money Available" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
     </MudItem>
     <MudItem xs="4" sm="3">
         <MudSelect @bind-Value="SelectedStockSymbol" HelperText="Stock Symbol" AnchorOrigin="Origin.BottomCenter">
@@ -30,6 +30,9 @@
     </MudItem>
     <MudItem xs="4" sm="3">
         <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1+CustomPercentage/100)" HelperText="New Stock Price" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
+    </MudItem>
+    <MudItem xs="4" sm="3">
+        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Disabled T="string" Text="@GetNumberOfSharesByCustomPercentage()" HelperText="Number of shares" />
     </MudItem>
 </MudGrid>
 <br />
