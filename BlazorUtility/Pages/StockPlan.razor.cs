@@ -95,7 +95,8 @@ public partial class StockPlan
     private static int GetTimeBasedValue()
     {
         var currentTime = DateTime.UtcNow.TimeOfDay;
-        var startTime = new TimeSpan(14, 30, 0); // 2:30 PM UTC
+        // Need to update for daylight saving time
+        var startTime = new TimeSpan(13, 30, 0); // 1:30 PM UTC
         var endTime = new TimeSpan(21, 0, 0); // 9:00 PM UTC
 
         if (currentTime >= startTime && currentTime <= endTime)
