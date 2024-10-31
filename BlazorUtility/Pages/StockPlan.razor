@@ -71,6 +71,22 @@
             </MudItem>
         </MudGrid>
     </MudExpansionPanel>
+    <MudExpansionPanel Text="Rule 10/15/18/22">
+        <MudGrid>
+            <MudItem xs="6" sm="3">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.9)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 10%" />
+            </MudItem>
+            <MudItem xs="6" sm="3">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.85)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 15%" />
+            </MudItem>
+            <MudItem xs="6" sm="3">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.82)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 18%" />
+            </MudItem>
+            <MudItem xs="6" sm="3">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.78)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 22%" />
+            </MudItem>
+        </MudGrid>
+    </MudExpansionPanel>
 </MudExpansionPanels>
 
 <br />
