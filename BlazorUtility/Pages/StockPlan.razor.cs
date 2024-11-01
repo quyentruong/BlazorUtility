@@ -54,13 +54,13 @@ public partial class StockPlan
     private async Task GetCurrentStockPrice()
     {
         Snackbar.Add("Getting stock price...", Severity.Info);
-        var i = GetTimeBasedValue();
+        var (i, formattedTime) = GetTimeBasedValue(); // Destructure the tuple
         string cacheKey = $"{SelectedStockSymbol}_StockPrice";
         string timeBasedValueKey = $"{SelectedStockSymbol}_TimeBasedValue";
 
         // Check if the cached value is still valid
-        var cachedTimeBasedValue = await localStorage.GetItemAsync<int?>(timeBasedValueKey);
-        if (cachedTimeBasedValue.HasValue && cachedTimeBasedValue.Value == i)
+        var cachedTimeBasedValue = await localStorage.GetItemAsync<string?>(timeBasedValueKey);
+        if (cachedTimeBasedValue != null && cachedTimeBasedValue == formattedTime)
         {
             StockPrice = await localStorage.GetItemAsync<double>(cacheKey);
             Snackbar.Add("Stock price retrieved from cache.", Severity.Success);
@@ -81,7 +81,7 @@ public partial class StockPlan
 
                 // Cache the stock price and time-based value
                 await localStorage.SetItemAsync(cacheKey, StockPrice);
-                await localStorage.SetItemAsync(timeBasedValueKey, i);
+                await localStorage.SetItemAsync(timeBasedValueKey, formattedTime);
 
                 Snackbar.Add("Stock price fetched successfully.", Severity.Success);
             }
@@ -92,17 +92,22 @@ public partial class StockPlan
         }
     }
 
-    private static int GetTimeBasedValue()
+    private static (int, string) GetTimeBasedValue()
     {
-        var currentTime = DateTime.UtcNow.TimeOfDay;
-        // Need to update for daylight saving time
-        var startTime = new TimeSpan(13, 30, 0); // 1:30 PM UTC
-        var endTime = new TimeSpan(21, 0, 0); // 9:00 PM UTC
+        // Define the Eastern Time Zone
+        var easternTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/New_York");
 
-        if (currentTime >= startTime && currentTime <= endTime)
-        {
-            return 2;
-        }
-        return 1;
+        // Get the current time in Eastern Time
+        var easternTime = TimeZoneInfo.ConvertTime(DateTime.Now, easternTimeZone);
+
+        // Define the start and end times in Eastern Time
+        var startTime = new TimeSpan(9, 30, 0); // 9:30 AM Eastern Time
+        var endTime = new TimeSpan(16, 0, 0); // 4:00 PM Eastern Time
+
+        int result =
+            (easternTime.TimeOfDay >= startTime && easternTime.TimeOfDay <= endTime) ? 2 : 1;
+        string formattedTime = easternTime.ToString("yyyy-MM-dd HH");
+
+        return (result, formattedTime);
     }
 }
