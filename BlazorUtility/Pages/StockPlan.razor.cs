@@ -6,6 +6,8 @@ namespace BlazorUtility.Pages;
 
 public partial class StockPlan
 {
+    private const double SECURITIES_TRANSACTION_TAX = 0.0000278;
+    private int SharesToSell = 0;
     private double MoneyAvailable = 0;
     private double StockPrice = 0;
     private double CustomPercentage = 0;
@@ -27,20 +29,54 @@ public partial class StockPlan
         return Task.CompletedTask;
     }
 
-    private string GetStockPriceByPercentage(double percentage)
+    private double GetStockPriceByPercentage(double percentage, int _ = 0) =>
+        Math.Round(StockPrice * percentage, 2);
+
+    public string GetStockPriceByPercentage(double percentage) =>
+        GetStockPriceByPercentage(percentage, 0).ToString();
+
+    private double TotalFees(double percentage, int _ = 0)
     {
-        return Math.Round(StockPrice * percentage, 2).ToString();
+        if (SharesToSell == 0 || StockPrice == 0)
+        {
+            return 0;
+        }
+        var totalSalePrice = Math.Round(
+            (GetStockPriceByPercentage(percentage, 0)) * SharesToSell,
+            2
+        );
+
+        return Math.Max(Math.Round(totalSalePrice * SECURITIES_TRANSACTION_TAX, 2), 0.01);
     }
 
-    private string GetNumberOfSharesByCustomPercentage()
+    private string TotalFees(double SalePrice) => $"Fees = {TotalFees(SalePrice, 0)}";
+
+    private double GetProfitFromSalePrice(double percentage, int _ = 0)
+    {
+        if (SharesToSell == 0 || StockPrice == 0)
+        {
+            return 0;
+        }
+        var totalFees = TotalFees(percentage, 0);
+        var totalProfit = Math.Round(
+            (GetStockPriceByPercentage(percentage, 0) - StockPrice) * SharesToSell,
+            2
+        );
+
+        return Math.Round(totalProfit - totalFees, 2);
+    }
+
+    private string GetProfitFromSalePrice(double percentage) =>
+        GetProfitFromSalePrice(percentage, 0).ToString();
+
+    private double GetNumberOfSharesByCustomPercentage()
     {
         if (StockPrice == 0)
-            return "0"; // avoid divide by zero (StockPrice = 0)
-        _ = double.TryParse(
-            GetStockPriceByPercentage(1 + CustomPercentage / 100),
-            out double stockPrice
-        );
-        return Math.Floor(MoneyAvailable / stockPrice).ToString();
+            return 0; // avoid divide by zero (StockPrice = 0)
+
+        var stockPrice = GetStockPriceByPercentage(1 + CustomPercentage / 100, 0);
+
+        return Math.Floor(MoneyAvailable / stockPrice);
     }
 
     private string GetNumberOfStocks(double percentage)
