@@ -21,7 +21,7 @@ builder.Services.AddHttpClient(
 );
 builder.Services.AddHttpClient(
     "YahooFinance",
-    client => client.BaseAddress = new Uri("https://yahooapi.qtsanjose.ddnsgeek.com")
+    client => client.BaseAddress = new Uri("https://yahooapi.qtsanjose.freeddns.org")
 );
 builder.Services.AddMudServices(config =>
 {
