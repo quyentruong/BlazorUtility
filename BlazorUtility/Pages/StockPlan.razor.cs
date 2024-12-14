@@ -136,6 +136,15 @@ public partial class StockPlan
         // Get the current time in Eastern Time
         var easternTime = TimeZoneInfo.ConvertTime(DateTime.Now, easternTimeZone);
 
+        // Check if it's a weekend
+        if (
+            easternTime.DayOfWeek == DayOfWeek.Saturday
+            || easternTime.DayOfWeek == DayOfWeek.Sunday
+        )
+        {
+            return (1, easternTime.ToString("yyyy-MM-dd HH"));
+        }
+
         // Define the start and end times in Eastern Time
         var startTime = new TimeSpan(9, 30, 0); // 9:30 AM Eastern Time
         var endTime = new TimeSpan(16, 0, 0); // 4:00 PM Eastern Time
