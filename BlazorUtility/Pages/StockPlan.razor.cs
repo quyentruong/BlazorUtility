@@ -10,7 +10,7 @@ public partial class StockPlan
     private int SharesToSell = 0;
     private double MoneyAvailable = 0;
     private double StockPrice = 0;
-    private double CustomPercentage = 0;
+    private decimal CustomPercentage = 0;
     private string SelectedStockSymbol = "SOXL";
     private readonly string[] _stockSymbols =
     {
@@ -23,10 +23,10 @@ public partial class StockPlan
         "SPLG"
     };
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         Array.Sort(_stockSymbols);
-        return Task.CompletedTask;
+        await GetCurrentStockPrice(SelectedStockSymbol);
     }
 
     private double GetStockPriceByPercentage(double percentage, int _ = 0) =>
@@ -74,7 +74,7 @@ public partial class StockPlan
         if (StockPrice == 0)
             return 0; // avoid divide by zero (StockPrice = 0)
 
-        var stockPrice = GetStockPriceByPercentage(1 + CustomPercentage / 100, 0);
+        var stockPrice = GetStockPriceByPercentage(1 + (double)CustomPercentage / 100, 0);
 
         return Math.Floor(MoneyAvailable / stockPrice);
     }
@@ -87,8 +87,9 @@ public partial class StockPlan
         return $"{stockPrice} = {Math.Floor(MoneyAvailable / 4 / stockPrice)}";
     }
 
-    private async Task GetCurrentStockPrice()
+    private async Task GetCurrentStockPrice(string newValue)
     {
+        SelectedStockSymbol = newValue;
         Snackbar.Add("Getting stock price...", Severity.Info);
         var (i, formattedTime) = GetTimeBasedValue(); // Destructure the tuple
         string cacheKey = $"{SelectedStockSymbol}_StockPrice";
