@@ -26,10 +26,10 @@
         <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="-999" Max="999" Step=".1M" @bind-Value="CustomPercentage" HelperText="Percentage" Adornment="Adornment.End" AdornmentText="%" AdornmentColor="Color.Info" />
     </MudItem>
     <MudItem xs="5" sm="3">
-        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1+(double)CustomPercentage/100)" HelperText="New Stock Price" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
+        <MudTextField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1+(double)CustomPercentage/100)" HelperText="New Stock Price" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
     </MudItem>
     <MudItem xs="5" sm="3">
-        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Disabled T="string" Text="@GetNumberOfSharesByCustomPercentage().ToString()" HelperText="Number of shares" />
+        <MudTextField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Disabled T="string" Text="@GetNumberOfSharesByCustomPercentage().ToString()" HelperText="Number of shares" />
     </MudItem>
 </MudGrid>
 <br />
