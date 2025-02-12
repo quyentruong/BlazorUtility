@@ -82,7 +82,7 @@ public partial class StockPlan
     private string GetNumberOfStocks(double percentage)
     {
         if (StockPrice == 0)
-            return "0"; // avoid divide by zero (StockPrice = 0)
+            return "0 = 0"; // avoid divide by zero (StockPrice = 0)
         _ = double.TryParse(GetStockPriceByPercentage(percentage), out double stockPrice);
         return $"{stockPrice} = {Math.Floor(MoneyAvailable / 4 / stockPrice)}";
     }
