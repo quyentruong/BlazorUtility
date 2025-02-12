@@ -1,62 +1,64 @@
 ﻿@namespace BlazorUtility.StockPlan
 
-<MudHidden Breakpoint="Breakpoint.SmAndDown">
-    <MudGrid>
-        <MudItem sm="3">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[0]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[0]}%")" />
-        </MudItem>
-        <MudItem sm="3">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[1]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[1]}%")" />
-        </MudItem>
-        <MudItem sm="3">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[2]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[2]}%")" />
-        </MudItem>
-        <MudItem sm="3">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[3]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[3]}%")" />
-        </MudItem>
-        <MudItem sm="3">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[0]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[0]/100.0)" />
-        </MudItem>
-        <MudItem sm="3">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[1]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[1]/100.0)" />
-        </MudItem>
-        <MudItem sm="3">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[2]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[2]/100.0)" />
-        </MudItem>
-        <MudItem sm="3">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[3]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[3]/100.0)" />
-        </MudItem>
-    </MudGrid>
-</MudHidden>
+<MudExpansionPanel Text="@PanelText">
+    <MudHidden Breakpoint="Breakpoint.SmAndDown">
+        <MudGrid>
+            <MudItem sm="3">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[0]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[0]}%")" />
+            </MudItem>
+            <MudItem sm="3">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[1]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[1]}%")" />
+            </MudItem>
+            <MudItem sm="3">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[2]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[2]}%")" />
+            </MudItem>
+            <MudItem sm="3">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[3]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[3]}%")" />
+            </MudItem>
+            <MudItem sm="3">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[0]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[0]/100.0)" />
+            </MudItem>
+            <MudItem sm="3">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[1]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[1]/100.0)" />
+            </MudItem>
+            <MudItem sm="3">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[2]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[2]/100.0)" />
+            </MudItem>
+            <MudItem sm="3">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[3]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[3]/100.0)" />
+            </MudItem>
+        </MudGrid>
+    </MudHidden>
 
-<MudHidden Breakpoint="Breakpoint.MdAndUp">
-    <MudGrid>
-        <MudItem xs="6">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[0]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[0]}%")" />
-        </MudItem>
-        <MudItem xs="6">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[0]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[0]/100.0)" />
-        </MudItem>
-        <MudItem xs="6">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[1]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[1]}%")" />
-        </MudItem>
-        <MudItem xs="6">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[1]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[1]/100.0)" />
-        </MudItem>
-        <MudItem xs="6">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[2]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[2]}%")" />
-        </MudItem>
-        <MudItem xs="6">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[2]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[2]/100.0)" />
-        </MudItem>
-        <MudItem xs="6">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[3]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[3]}%")" />
-        </MudItem>
-        <MudItem xs="6">
-            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[3]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[3]/100.0)" />
-        </MudItem>
-    </MudGrid>
-</MudHidden>
+    <MudHidden Breakpoint="Breakpoint.MdAndUp">
+        <MudGrid>
+            <MudItem xs="6">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[0]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[0]}%")" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[0]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[0]/100.0)" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[1]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[1]}%")" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[1]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[1]/100.0)" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[2]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[2]}%")" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[2]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[2]/100.0)" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetStockPriceByPercentage(1 + percentage[3]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Success" HelperText="@($"Up {percentage[3]}%")" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetProfitFromSalePrice(1 + percentage[3]/100.0)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AccountBalance" AdornmentColor="Color.Success" HelperText="@TotalFees(1 + percentage[3]/100.0)" />
+            </MudItem>
+        </MudGrid>
+    </MudHidden>
+</MudExpansionPanel>
 
 @code {
     [Parameter, EditorRequired] public string RuleSet { get; set; } = default!;
@@ -64,6 +66,7 @@
     [Parameter, EditorRequired] public Func<double, string> GetProfitFromSalePrice { get; set; } = default!;
     [Parameter, EditorRequired] public Func<double, string> TotalFees { get; set; } = default!;
     private int[] percentage = Array.Empty<int>();
+    private string PanelText => $"Rule {string.Join("/", percentage)}";
 
     protected override void OnInitialized()
     {

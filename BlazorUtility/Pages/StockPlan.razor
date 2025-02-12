@@ -6,7 +6,7 @@
 
 <MudGrid>
     <MudItem xs="5" sm="3">
-        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="0" Max="9999999" @bind-Value="MoneyAvailable" HelperText="Money Available" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
+        <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="7" Min="0" Max="9999999" @bind-Value="MoneyAvailable" HelperText="Money Available" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Info" />
     </MudItem>
     <MudItem xs="5" sm="3">
         <MudSelect T="string" Value="@SelectedStockSymbol" HelperText="Stock Symbol" AnchorOrigin="Origin.BottomCenter" ValueChanged="async (newValue) => await GetCurrentStockPrice(newValue)">
@@ -35,55 +35,13 @@
 <br />
 <h3>Buying Plan</h3>
 <br />
+@if (MoneyAvailable > StockPrice * 4) {
+    <p>You can buy each part for @(MoneyAvailable/4)</p>
+}
 <MudExpansionPanels MultiExpansion>
-    <MudExpansionPanel Text="Rule 5/8/11/14">
-        <MudGrid>
-            <MudItem xs="6" sm="3">
-                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.95)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 5%" />
-            </MudItem>
-            <MudItem xs="6" sm="3">
-                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.92)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 8%" />
-            </MudItem>
-            <MudItem xs="6" sm="3">
-                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.89)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 11%" />
-            </MudItem>
-            <MudItem xs="6" sm="3">
-                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.86)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 14%" />
-            </MudItem>
-        </MudGrid>
-    </MudExpansionPanel>
-    <MudExpansionPanel Text="Rule 6/9/12/15">
-        <MudGrid>
-            <MudItem xs="6" sm="3">
-                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.94)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 6%" />
-            </MudItem>
-            <MudItem xs="6" sm="3">
-                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.91)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 9%" />
-            </MudItem>
-            <MudItem xs="6" sm="3">
-                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.88)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 12%" />
-            </MudItem>
-            <MudItem xs="6" sm="3">
-                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.85)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 15%" />
-            </MudItem>
-        </MudGrid>
-    </MudExpansionPanel>
-    <MudExpansionPanel Text="Rule 10/15/18/22">
-        <MudGrid>
-            <MudItem xs="6" sm="3">
-                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.9)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 10%" />
-            </MudItem>
-            <MudItem xs="6" sm="3">
-                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.85)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 15%" />
-            </MudItem>
-            <MudItem xs="6" sm="3">
-                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.82)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 18%" />
-            </MudItem>
-            <MudItem xs="6" sm="3">
-                <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(0.78)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="Down 22%" />
-            </MudItem>
-        </MudGrid>
-    </MudExpansionPanel>
+    <BlazorUtility.StockPlan.BuyingStockDisplay GetNumberOfStocks="GetNumberOfStocks" RuleSet="5,8,11,14" />
+    <BlazorUtility.StockPlan.BuyingStockDisplay GetNumberOfStocks="GetNumberOfStocks" RuleSet="6,9,12,15" />
+    <BlazorUtility.StockPlan.BuyingStockDisplay GetNumberOfStocks="GetNumberOfStocks" RuleSet="10,15,18,22" />
 </MudExpansionPanels>
 
 <br />
@@ -91,18 +49,12 @@
 <br />
 
 <MudItem xs="4" sm="3">
-    <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="5" Min="0" Max="9999999" @bind-Value="SharesToSell" HelperText="Number of shares" />
+    <MudNumericField Margin="Margin.Dense" DebounceInterval="500" MaxLength="7" Min="0" Max="9999999" @bind-Value="SharesToSell" HelperText="Number of shares" />
 </MudItem>
 
-
-
 <MudExpansionPanels MultiExpansion>
-    <MudExpansionPanel Text="Rule 5/8/11/14">
-        <BlazorUtility.StockPlan.SellingStockDisplay GetProfitFromSalePrice="GetProfitFromSalePrice" GetStockPriceByPercentage="GetStockPriceByPercentage" TotalFees="TotalFees" RuleSet="5,8,11,14" />
-    </MudExpansionPanel>
-    <MudExpansionPanel Text="Rule 6/9/12/15">
-        <BlazorUtility.StockPlan.SellingStockDisplay GetProfitFromSalePrice="GetProfitFromSalePrice" GetStockPriceByPercentage="GetStockPriceByPercentage" TotalFees="TotalFees" RuleSet="6,9,12,15" />
-    </MudExpansionPanel>
+    <BlazorUtility.StockPlan.SellingStockDisplay GetProfitFromSalePrice="GetProfitFromSalePrice" GetStockPriceByPercentage="GetStockPriceByPercentage" TotalFees="TotalFees" RuleSet="5,8,11,16" />
+    <BlazorUtility.StockPlan.SellingStockDisplay GetProfitFromSalePrice="GetProfitFromSalePrice" GetStockPriceByPercentage="GetStockPriceByPercentage" TotalFees="TotalFees" RuleSet="6,9,12,15" />
 </MudExpansionPanels>
 
 

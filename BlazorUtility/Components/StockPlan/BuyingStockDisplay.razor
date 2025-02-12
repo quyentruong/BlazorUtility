@@ -1,0 +1,54 @@
+﻿@namespace BlazorUtility.StockPlan
+
+<MudExpansionPanel Text="@PanelText">
+    <MudGrid>
+        <MudItem xs="6" sm="3">
+            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(1 - percentage[0]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="@($"Down {percentage[0]}%")" />
+        </MudItem>
+        <MudItem xs="6" sm="3">
+            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(1 - percentage[1]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="@($"Down {percentage[1]}%")" />
+        </MudItem>
+        <MudItem xs="6" sm="3">
+            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(1 - percentage[2]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="@($"Down {percentage[2]}%")" />
+        </MudItem>
+        <MudItem xs="6" sm="3">
+            <MudTextField Margin="Margin.Dense" MaxLength="5" Disabled T="string" Text="@GetNumberOfStocks(1 - percentage[3]/100.0)" Adornment="Adornment.Start" AdornmentText="$" AdornmentColor="Color.Error" HelperText="@($"Down {percentage[3]}%")" />
+        </MudItem>
+    </MudGrid>
+</MudExpansionPanel>
+
+
+@code {
+    [Parameter, EditorRequired] public string RuleSet { get; set; } = default!;
+    [Parameter, EditorRequired] public Func<double, string> GetNumberOfStocks { get; set; } = default!;
+    private int[] percentage = Array.Empty<int>();
+    private string PanelText => $"Rule {string.Join("/", percentage)} Cost: ${CalculateTotalCost()}";
+
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrWhiteSpace(RuleSet))
+        {
+            throw new ArgumentNullException(nameof(RuleSet));
+        }
+
+        percentage = RuleSet.Split(',')
+                            .Select(p => int.Parse(p.Trim()))
+                            .ToArray();
+
+        if (percentage.Length < 4)
+        {
+            throw new ArgumentException("RuleSet must contain at least 4 values.");
+        }
+    }
+
+    private string CalculateTotalCost()
+    {
+        decimal totalCost = 0;
+        foreach (var percent in percentage)
+        {
+            var numberOfStocks = GetNumberOfStocks(1 - percent / 100.0).Split("=");
+            totalCost += decimal.Parse(numberOfStocks[1]) * decimal.Parse(numberOfStocks[0]);
+        }
+        return totalCost.ToString();
+    }
+}
