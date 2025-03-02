@@ -16,7 +16,7 @@ public sealed class DuckEmailValidationAttribute : ValidationAttribute
             }
 
             // Perform the additional validation check
-            if (!emailAddress.Contains("@duck.com"))
+            if (!emailAddress.EndsWith("@duck.com"))
             {
                 return false;
             }
